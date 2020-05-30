@@ -41,7 +41,7 @@ function handleEnvironment() {
       'resources/img/background_map_horizontal.jpg'
   ]);
 
-  // backgroundTexture.minFilter = THREE.LinearFilter;
+  backgroundTexture.minFilter = THREE.LinearFilter;
   environment.scene.background = backgroundTexture;
 
   environment.camera.position.z = 5;
