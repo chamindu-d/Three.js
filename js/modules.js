@@ -1,20 +1,42 @@
-// Class for a Three.JS Environment
-class Environment {
+// Class for a Physics Environment
+class PhysicsEnvironment {
 
-  constructor(backgroundColor) {
+  constructor(cameraPosition = new THREE.Vector3(0, 0, 0), backgroundColor = 'white') {
+
+    // Configure Main Properties
 
     this.fps = 60;
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.renderer = new THREE.WebGLRenderer();
-
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setClearColor(backgroundColor);
+
+    // Configure Orbit Controls
+
+    this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.target = new THREE.Vector3(0, 0, 0);
+    this.controls.minDistance = 15;
+    this.controls.maxDistance = 700;
+    this.controls.enablePan = false;
+    this.camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+    this.controls.update();
 
     document.body.appendChild(this.renderer.domElement);
 
   }
 
+  // Set a cubemap background on the environment scene
+  setSceneBackground(textures) {
+
+    const backgroundTexture = new THREE.CubeTextureLoader().load(textures);
+    backgroundTexture.minFilter = THREE.LinearFilter;
+
+    this.scene.background = backgroundTexture;
+
+  }
+
+  // Handle the environment scene rendering loop
   handleRendering(timer) {
 
     setInterval(timer, 1000 / this.fps);
@@ -48,6 +70,8 @@ class PhysicsBody {
   }
 
 }
+
+// -------- Subroutines
 
 // Rotate a camera around a specific point based on input
 function rotateAroundObject(camera, object, radius, scale, anglePair, xPositive, xNegative, yPositive, yNegative) {
